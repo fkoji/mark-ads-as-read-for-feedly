@@ -1,2 +1,2 @@
-feedly-auto-read-ads
+Automatically Mark As Read for Feedly
 ====================
