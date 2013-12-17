@@ -25,12 +25,13 @@ function save() {
   $('.option').each(function() {
     options.push($(this).val());
   });
-  localStorage['options'] = JSON.stringify(options);
 
-  $('#success_to_save').fadeIn(100, function() {
-    setTimeout(function() {
-      $('#success_to_save').fadeOut(500);
-    }, 2000);
+  chrome.storage.local.set({options: options}, function() {
+    $('#success_to_save').fadeIn(100, function() {
+      setTimeout(function() {
+        $('#success_to_save').fadeOut(500);
+      }, 2000);
+    });
   });
 }
 
@@ -42,16 +43,16 @@ function appendOption() {
 }
 
 function init() {
-  var options = localStorage['options'];
-  if (typeof options !== 'undefined') {
-    options = JSON.parse(options);
-    options.forEach(function(e, i) {
-      if ($('#option_'+i).length === 0) {
-        appendOption();
-      }
-      $('#option_'+i).val(e);
-    });
-  }
+  chrome.storage.local.get('options', function(items) {
+    if (typeof items.options !== 'undefined') {
+      items.options.forEach(function(e, i) {
+        if ($('#option_'+i).length === 0) {
+          appendOption();
+        }
+        $('#option_'+i).val(e);
+      });
+    }
+  });
 }
 
 init();
