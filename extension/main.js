@@ -15,6 +15,9 @@ chrome.storage.local.get('options', function(items) {
         if (typeof el.dataset.title === 'undefined') return;
 
         options.forEach(function(e) {
+            if (e === '') {
+                return;
+            }
 
             if (el.dataset.title.toLowerCase().indexOf(e.toLowerCase()) === 0) {
                 var event = el.ownerDocument.createEvent("MouseEvents");
