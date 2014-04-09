@@ -1,31 +1,31 @@
 {
-  "name": "Mark Ads as Read for Feedly",
-  "version": "0.3.2",
-  "manifest_version": 2,
+    "name": "Mark Ads as Read for Feedly",
+    "version": "0.4.0",
+    "manifest_version": 2,
 
-  "description": "Ads items are marked as read and hidden automatically on Feedly.",
-  "icons": {
-    "16": "icon16.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
-  },
+    "description": "You can mark as read automatically on Feedly.",
+    "icons": {
+        "16": "icon16.png",
+        "48": "icon48.png",
+        "128": "icon128.png"
+    },
 
-  "permissions": [
-    "tabs", "storage", "http://*/*"
-  ],
+    "permissions": [
+        "tabs", "storage", "http://*/*"
+    ],
 
-  "options_page": "options.html",
+    "options_page": "options.html",
 
-  "content_scripts": [
-    {
-      "matches": [
-        "http://*.feedly.com/*"
-      ],
-      "js": [
-        "main.js"
-      ]
-    }
-  ],
+    "content_scripts": [
+        {
+            "matches": [
+                "http://*.feedly.com/*"
+            ],
+            "js": [
+                "main.js"
+            ]
+        }
+    ],
 
-  "homepage_url": "https://github.com/fkoji/mark-ads-as-read-for-feedly"
+    "homepage_url": "https://github.com/fkoji/mark-ads-as-read-for-feedly"
 }
