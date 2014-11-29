@@ -1,6 +1,6 @@
 {
   "name": "Mark Ads as Read for Feedly",
-  "version": "0.3.1",
+  "version": "0.3.3",
   "manifest_version": 2,
 
   "description": "Ads items are marked as read and hidden automatically on Feedly.",
@@ -19,7 +19,8 @@
   "content_scripts": [
     {
       "matches": [
-        "http://*.feedly.com/*"
+        "https://feedly.com/*",
+        "http://feedly.com/*"
       ],
       "js": [
         "main.js"
