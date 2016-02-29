@@ -1,5 +1,6 @@
-chrome.storage.local.get('options', function(items) {
-    var options;
+chrome.storage.local.get(['options', 'positions'], function(items) {
+    var options
+      , positions;
 
     if (typeof items.options !== 'undefined') {
         options = items.options;
@@ -7,19 +8,44 @@ chrome.storage.local.get('options', function(items) {
         options = ['PR:', 'AD:', '[PR]'];
     }
 
+    if (typeof items.positions !== 'undefined') {
+        positions = items.positions;
+    } else {
+        positions = [];
+        if (typeof items.options !== 'undefined') {
+            items.options.forEach(function() {
+                positions.push(0);
+            });
+        } else {
+            positions = [0, 0, 0];
+        }
+    }
+
+    console.log('[MARF] %o', options);
+    console.log('[MARF] %o', positions);
+
     document.body.addEventListener("DOMNodeInserted", function(e) {
         var el = e.target;
 
-        if (el.nodeType !== 1) return;
-        if (!el.id.match(/_main$/)) return;
-        if (typeof el.dataset.title === 'undefined') return;
+        if (el.nodeType !== 1) {
+            return false;
+        }
 
-        options.forEach(function(e) {
+        if (!el.id.match(/_main$/)) {
+            return false;
+        }
+
+        if (typeof el.dataset.title === 'undefined') {
+            return false;
+        }
+
+        options.forEach(function(e, i) {
             if (e === '') {
                 return;
             }
 
-            if (el.dataset.title.toLowerCase().indexOf(e.toLowerCase()) === 0) {
+            if ((positions[i] === 0 && el.dataset.title.toLowerCase().indexOf(e.toLowerCase()) === 0) ||
+                (positions[i] === 1 && el.dataset.title.toLowerCase().indexOf(e.toLowerCase()) !== -1)) {
                 var event = el.ownerDocument.createEvent("MouseEvents");
                 event.initMouseEvent("click", true, true,
                                      el.ownerDocument.defaultView,
@@ -28,8 +54,12 @@ chrome.storage.local.get('options', function(items) {
                                      0, null);
                 el.dispatchEvent(event);
    
-                var inlineFlameId = el.id.replace(/_main_abstract$/, '_inlineframe');
-                document.getElementById(inlineFlameId).style.display = 'none';
+                //console.log('[MARF] %o', el.id);
+
+                setTimeout(function() {
+                    var inlineFlameId = el.id.replace(/_main_abstract$/, '_inlineframe');
+                    document.getElementById(inlineFlameId).style.display = 'none';
+                }, 100);
             }
 
         });
