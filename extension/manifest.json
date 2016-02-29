@@ -19,7 +19,8 @@
     "content_scripts": [
         {
             "matches": [
-                "http://*.feedly.com/*"
+                "https://feedly.com/*",
+                "http://feedly.com/*"
             ],
             "js": [
                 "main.js"
