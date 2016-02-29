@@ -21,15 +21,23 @@ chrome.storage.local.get(['options', 'positions'], function(items) {
         }
     }
 
-    console.log(options);
-    console.log(positions);
+    console.log('[MARF] %o', options);
+    console.log('[MARF] %o', positions);
 
     document.body.addEventListener("DOMNodeInserted", function(e) {
         var el = e.target;
 
-        if (el.nodeType !== 1) return;
-        if (!el.id.match(/_main$/)) return;
-        if (typeof el.dataset.title === 'undefined') return;
+        if (el.nodeType !== 1) {
+            return false;
+        }
+
+        if (!el.id.match(/_main$/)) {
+            return false;
+        }
+
+        if (typeof el.dataset.title === 'undefined') {
+            return false;
+        }
 
         options.forEach(function(e, i) {
             if (e === '') {
@@ -46,8 +54,12 @@ chrome.storage.local.get(['options', 'positions'], function(items) {
                                      0, null);
                 el.dispatchEvent(event);
    
-                var inlineFlameId = el.id.replace(/_main_abstract$/, '_inlineframe');
-                document.getElementById(inlineFlameId).style.display = 'none';
+                //console.log('[MARF] %o', el.id);
+
+                setTimeout(function() {
+                    var inlineFlameId = el.id.replace(/_main_abstract$/, '_inlineframe');
+                    document.getElementById(inlineFlameId).style.display = 'none';
+                }, 100);
             }
 
         });

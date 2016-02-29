@@ -4,12 +4,42 @@
     <meta charset="UTF-8">
     <title>Mark Ads as Read for Feedly</title>
 <style>
-    body { background:#fefefe; }
-    #wrapper { width:720px; margin:0 auto; }
-    ul { list-style:none; margin:0; padding:0; }
-    li { margin:0; padding:0; }
-    .option { padding:2px; font-size:16px; }
-    .success { background:#eef; border:#ccf; color:#55f; padding:4px 6px; border-radius:3px; }
+    body {
+        background:#fefefe;
+    }
+    #wrapper {
+        width:480px;
+        margin:0 auto;
+    }
+    ul {
+        list-style:none;
+        margin:0;
+        padding:0;
+    }
+    li {
+        margin:10px 0;
+        padding:0;
+    }
+    li input.option {
+        padding:2px 4px;
+        font-size:16px;
+    }
+    li select {
+        margin-left:10px;
+        font-size:16px;
+    }
+    #controls input {
+        font-size: 18px;
+    }
+    div.success {
+        margin:10px 0;
+        padding:10px;
+        background:#eef;
+        border:#ccf;
+        color:#77f;
+        font-size:16px;
+        border-radius:3px;
+    }
 </style>
 </head>
 <body>
@@ -18,10 +48,13 @@
         <p>Feedly items that the title starts with <!-- or includes --> these strings are marked as read automatically.</p>
         <p>(Feedlyのアイテムで、タイトルが以下の文字列で始まる<!-- or 含む -->アイテムが自動的に既読になります。)</p>
         <ul id="options"></ul>
-        <input type="button" value="+" id="append">
-        <input type="button" value="Save" id="save">
-        <input type="button" value="Reset to extension default" id="revert">
-        <p id="success_to_save" class="success" style="display:none;">Save done!</p>
+
+        <div id="controls" style="display:none;">
+            <input type="button" value="+" id="append">
+            <input type="button" value="Save" id="save">
+            <input type="button" value="Reset to extension default" id="revert">
+        </div>
+        <div id="success_to_save" class="success" style="display:none;">Saved!</div>
     </div><!-- /#wrapper -->
     <script src="jquery.js"></script>
     <script src="options.js"></script>

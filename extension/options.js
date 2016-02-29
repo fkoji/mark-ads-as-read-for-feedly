@@ -2,15 +2,15 @@
  * save settings to storage
  */
 function save() {
-    var options = [];
-    $('.option').each(function() {
-        options.push($(this).val());
-    });
+    var options = []
+      , positions = [];
 
-    var positions = [];
-    $('.position').each(function() {
-        // be number
-        positions.push($(this).val() * 1);
+    $('.option').each(function(i, el) {
+        if ($(this).val() !== '') {
+            options.push($(this).val());
+            // be number
+            positions.push($('.position').eq(i).val() * 1);
+        }
     });
 
     chrome.storage.local.set({
@@ -79,7 +79,7 @@ function initOptions() {
     });
 }
 
-!function() {
+(function() {
     chrome.storage.local.get(function(items) {
         if (typeof items.options !== 'undefined') {
             items.options.forEach(function(e, i) {
@@ -98,5 +98,7 @@ function initOptions() {
         } else {
             initOptions();
         }
+
+        $('#controls').fadeIn();
     });
-}();
+})();
