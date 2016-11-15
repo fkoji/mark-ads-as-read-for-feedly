@@ -30,7 +30,7 @@ chrome.storage.local.get(['options', 'positions'], function(items) {
     //console.log('[MARF] %o', strs);
     //console.log('[MARF] %o', positions);
 
-    document.body.addEventListener("DOMNodeInserted", function(e) {
+    document.body.addEventListener("DOMSubtreeModified", function(e) {
         let el = e.target;
 
         if (el.nodeType !== 1) {
