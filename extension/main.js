@@ -38,13 +38,13 @@ chrome.storage.local.get(['options', 'positions'], function(items) {
         }
 
         if (typeof openedItemIds[el.id] !== 'undefined') {
-            let inlineFlameId = el.id.replace(/_main$/, '_inlineframe');
+            let entryHolderId = el.id.replace(/_main$/, '_entryHolder');
 
-            //console.log('[MARF] hidden %s', inlineFlameId);
+            //console.log('[MARF] hidden %s', entryHolderId);
 
             // To prevent scroll to top, use setTimeout
             setTimeout(function() {
-                document.getElementById(inlineFlameId).style.display = 'none';
+                document.getElementById(entryHolderId).style.opacity = '0.5';
             }, 100);
 
             return true;
