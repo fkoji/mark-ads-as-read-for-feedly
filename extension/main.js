@@ -4,7 +4,7 @@ chrome.storage.local.get(['options', 'positions'], function(items) {
     const START_WITH = 0;
     const INCLUDE    = 1;
 
-    var strs
+    let strs
       , positions
       , openedItemIds = {};
 
@@ -30,6 +30,78 @@ chrome.storage.local.get(['options', 'positions'], function(items) {
     //console.log('[MARF] %o', strs);
     //console.log('[MARF] %o', positions);
 
+    function observerCallback(mutationsList, observer) {
+        //console.log(mutationsList);
+        mutationsList.forEach(mutation => {
+            checkMutationRecord(mutation);
+        });
+    }
+
+    function checkMutationRecord(mutation) {
+        mutation.addedNodes.forEach(addedNode => {
+            checkAddedNode(addedNode);
+        });
+    }
+
+    function checkAddedNode(addedNode) {
+        if (addedNode.nodeType !== 1 || !addedNode.classList.contains('EntryList__chunk')) {
+            return;
+        }
+
+        //console.log(addedNode);
+        addedNode.childNodes.forEach(el => {
+            if (!el.id.match(/_main$/)) {
+                return;
+            }
+
+            if (typeof el.dataset.title === 'undefined') {
+                return false;
+            }
+
+            strs.forEach(function(str, i) {
+                if (str === '') {
+                    return;
+                }
+
+                let strIndex = el.dataset.title.toLowerCase().indexOf(str.toLowerCase());
+
+                // Matched
+                if (
+                    (positions[i] === START_WITH && strIndex === 0)
+                    || (positions[i] === INCLUDE && strIndex !== -1)
+                ) {
+                    let event = el.ownerDocument.createEvent('MouseEvents');
+                    //console.log('MATCHED!!', str);
+
+                    openedItemIds[el.id] = true;
+
+                    event.initMouseEvent(
+                        'click', true, true,
+                        el.ownerDocument.defaultView,
+                        1, 0, 0, 0, 0,
+                        false, false, false, false,
+                        0, null
+                    );
+
+                    setTimeout(() => {
+                        //console.log('[MARF] %o', el.id);
+                        el.dispatchEvent(event);
+                        //console.log('[MARF] %s %d', str, i);
+                    }, 100);
+                }
+            });
+        });
+    }
+
+    const observer = new MutationObserver(observerCallback);
+
+    observer.observe(document.body, {
+        childList: true,
+        attributes: false,
+        subtree: true
+    });
+
+    /*
     document.body.addEventListener("DOMSubtreeModified", function(e) {
         let el = e.target;
 
@@ -40,7 +112,7 @@ chrome.storage.local.get(['options', 'positions'], function(items) {
         if (typeof openedItemIds[el.id] !== 'undefined') {
             let entryHolderId = el.id.replace(/_main$/, '_entryHolder');
 
-            //console.log('[MARF] hidden %s', entryHolderId);
+            console.log('[MARF] hidden %s', entryHolderId);
 
             // To prevent scroll to top, use setTimeout
             setTimeout(function() {
@@ -49,43 +121,6 @@ chrome.storage.local.get(['options', 'positions'], function(items) {
 
             return true;
         }
-
-        if (!el.id.match(/_main$/)) {
-            return false;
-        }
-
-        if (typeof el.dataset.title === 'undefined') {
-            return false;
-        }
-
-        strs.forEach(function(str, i) {
-            if (str === '') {
-                return;
-            }
-
-            let strIndex = el.dataset.title.toLowerCase().indexOf(str.toLowerCase());
-
-            // Matched
-            if (
-                (positions[i] === START_WITH && strIndex === 0)
-                || (positions[i] === INCLUDE && strIndex !== -1)
-            ) {
-                let event = el.ownerDocument.createEvent('MouseEvents');
-
-                openedItemIds[el.id] = true;
-
-                event.initMouseEvent('click', true, true,
-                                     el.ownerDocument.defaultView,
-                                     1, 0, 0, 0, 0,
-                                     false, false, false, false,
-                                     0, null);
-
-                setTimeout(function() {
-                    //console.log('[MARF] %o', el.id);
-                    el.dispatchEvent(event);
-                    //console.log('[MARF] %s %d', str, i);
-                }, 100);
-            }
-        });
     }, false);
+    */
 });
