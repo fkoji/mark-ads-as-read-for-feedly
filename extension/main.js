@@ -44,12 +44,23 @@ chrome.storage.local.get(['options', 'positions'], function(items) {
     }
 
     function checkAddedNode(addedNode) {
-        if (addedNode.nodeType !== 1 || !addedNode.classList.contains('EntryList__chunk')) {
+        if (addedNode.nodeType !== 1) {
             return;
         }
 
-        //console.log(addedNode);
-        addedNode.childNodes.forEach(el => {
+        if (addedNode.classList.contains('EntryList__chunk')) {
+            readProcess(addedNode);
+            return;
+        }
+
+        addedNode.querySelectorAll('.EntryList__chunk').forEach(el => {
+            readProcess(el);
+        });
+    }
+
+    function readProcess(entryListChunk) {
+        //console.log(entryListChunk);
+        entryListChunk.childNodes.forEach(el => {
             if (!el.id.match(/_main$/)) {
                 return;
             }
